@@ -121,6 +121,11 @@ int main(int argc, char *argv[])
 	sigaction(SIGTERM, &sa, NULL);
 	sa.sa_handler = hup_handler;
 
+	if (load_config(&config, CONFIG_FILE)) {
+		fprintf(stderr, "FATAL: Could not read configuration file: %s", CONFIG_FILE);
+		return 1;
+	}
+
 	openlog("audisp-cef", LOG_CONS, config.facility);
 
 	if (gethostname(nodename, 63)) {
@@ -137,16 +142,13 @@ int main(int argc, char *argv[])
 		hostname = strdup(ht->h_name);
 	}
 
-	if (load_config(&config, CONFIG_FILE))
-		return 1;
-
 	au = auparse_init(AUSOURCE_FEED, 0);
 	if (au == NULL) {
 		syslog(LOG_ERR, "could not initialize auparse");
 		free_config(&config);
 		return -1;
 	}
-   
+
 	machine = audit_detect_machine();
 	if (machine < 0)
 		return -1;
