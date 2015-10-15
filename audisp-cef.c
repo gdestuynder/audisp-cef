@@ -470,6 +470,26 @@ static void handle_event(auparse_state_t *au,
 					havecef = i;
 					cef_msg.msgname = "EXECVE";
 					cef_msg.msgdesc = "Unix Exec";
+				} else if (!strncmp(sys, "adjtimex", 8)) {
+					havecef = i;
+					cef_msg.msgname = "ADJTIMEX";
+					cef_msg.msgdesc = "Time synchronize";
+				} else if (!strncmp(sys, "rename", 7)) {
+					havecef = i;
+					cef_msg.msgname = "RENAME";
+					cef_msg.msgdesc = "rename";
+				} else if (!strncmp(sys, "mknod", 5)) {
+					havecef = i;
+					cef_msg.msgname = "MKNOD";
+					cef_msg.msgdesc = "mknod";
+				} else if (!strncmp(sys, "rmdir", 5)) {
+					havecef = i;
+					cef_msg.msgname = "RMDIR";
+					cef_msg.msgdesc = "rmdir";
+				} else if (!strncmp(sys, "symlink", 7)) {
+					havecef = i;
+					cef_msg.msgname = "SYMLINK";
+					cef_msg.msgdesc = "Symbolic link";
 				} else {
 					syslog(LOG_INFO, "Unhandled system call %u %s", i, sys);
 				}
