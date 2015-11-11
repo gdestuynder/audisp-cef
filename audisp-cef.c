@@ -207,18 +207,27 @@ static int goto_record_type(auparse_state_t *au, int type)
 	return -1;
 }
 
+/* Removes quotes
+ * Remove  CR and LF
+ * @const char *in: if NULL, no processing is done.
+ */
 char *unescape(const char *in)
 {
+	if (in == NULL)
+		return NULL;
+
 	char *dst = (char *)in;
 	char *s = dst;
 	char *src = (char *)in;
 	char c;
 
 	while ((c = *src++) != '\0') {
-    	if (c != '"')
-        	*dst++ = c;
+		if ((c == '"') || (c == '\n') || (c == '\r') || (c == '\t')
+				|| (c == '\b') || (c == '\f') || (c == '\\'))
+			continue;
+		*dst++ = c;
 	}
-	*dst = '\0';
+	*dst++ = '\0';
 	return s;
 }
 
